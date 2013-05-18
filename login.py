@@ -63,7 +63,7 @@ class loginDialog(QtGui.QDialog, Ui_LoginDialog):
         session = {session[i]:session[i + 1] for i in range(0, len(session), 2)}
 
         self.parent.expires = time.time() + int(session["expires_in"])
-        self.parent.user_id = session[u"user_id"]
+        self.parent.userId = session[u"user_id"]
         self.parent.token = session[u"https://oauth.vk.com/blank.html#access_token"]
 
         self.parent.addPushButton.setEnabled(True)

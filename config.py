@@ -22,21 +22,21 @@ import shelve
 import os
 import time
 
-file_names = {u'config_dir': u'.pvp',
+fileNames = {u'config_dir': u'.pvp',
 u'session': u'session.db'}
 
-def config_dir_check():
-	config_dir_path = os.environ[u'HOME']+'/'+file_names[u'config_dir']
-	if os.access(config_dir_path, os.F_OK):
+def configDirCheck():
+	configDirPath = os.environ[u'HOME']+'/'+fileNames[u'config_dir']
+	if os.access(configDirPath, os.F_OK):
 		return True
 	else:
-		os.mkdir(config_dir_path)
+		os.mkdir(configDirPath)
 		return False
 
-def config_file_check(config_file_path, mode):
-	if not config_dir_check():
+def configFileCheck(configFilePath, mode):
+	if not configDirCheck():
 		return False
-	if os.access(config_file_path, mode):
+	if os.access(configFilePath, mode):
 		return True
 	else:
 		return False
@@ -46,13 +46,13 @@ def checkSession(expires):
 
 
 
-def load_session():
-	session_path = os.environ[u'HOME']+'/'+file_names[u'config_dir']+'/'+file_names[u'session']
-	if config_file_check(session_path, os.R_OK):
+def loadSession():
+	sessionPath = os.environ[u'HOME']+'/'+fileNames[u'config_dir']+'/'+fileNames[u'session']
+	if configFileCheck(sessionPath, os.R_OK):
 
-		s = shelve.open(session_path, 'r')
-		if "user_id" and 'token' and 'playlist' and 'expires' in s:
-			user_id = s['user_id']
+		s = shelve.open(sessionPath, 'r')
+		if "userId" and 'token' and 'playlist' and 'expires' in s:
+			userId = s['userId']
 			token = s['token']
 			playlist = s['playlist']
 			expires = checkSession(s['expires'])
@@ -60,14 +60,14 @@ def load_session():
 			s.close()
 			return False, False, [], False
 		s.close()
-		return user_id, token, playlist, expires
+		return userId, token, playlist, expires
 	else:
 		return False, False, [], False
 
-def save_session(**kwarg):
-	config_dir_check()
-	session_path = os.environ[u'HOME']+'/'+file_names[u'config_dir']+'/'+file_names[u'session']
-	s = shelve.open(session_path, 'n')
+def saveSession(**kwarg):
+	configDirCheck()
+	sessionPath = os.environ[u'HOME']+'/'+fileNames[u'config_dir']+'/'+fileNames[u'session']
+	s = shelve.open(sessionPath, 'n')
 	for i in kwarg:
 		s[i] = kwarg[i]
 	s.close()

@@ -62,7 +62,7 @@ class searchDialog(QtGui.QDialog, Ui_SearchDialog):
             self.play(self.searchTableWidget.selectedRanges()[0].topRow())
         PyQt4.QtGui.QTableWidget.keyPressEvent(self.searchTableWidget, event)
 
-    def playlist_selected(self):
+    def playlistSelected(self):
         indexes = []
         for selectionRange in self.playlistTableWidget.selectedRanges():
             indexes.extend(range(selectionRange.topRow(), selectionRange.bottomRow()+1))
@@ -75,7 +75,7 @@ class searchDialog(QtGui.QDialog, Ui_SearchDialog):
     def getAudio(self):
         try:
             method = 'audio.get'
-            self.resp = self.parent.vk.getAudio(method=method, user_id=self.parent.user_id, token=self.parent.token)
+            self.resp = self.parent.vk.getAudio(method=method, userId=self.parent.userId, token=self.parent.token)
         except api_exception.MethodErr, e:
             msg = PyQt4.QtGui.QMessageBox(self)
             msg.setText(e.error_msg+'\n'+str(e.request_params))
@@ -86,19 +86,10 @@ class searchDialog(QtGui.QDialog, Ui_SearchDialog):
 
 
     def searchAudio(self):
-        # query = str("Выс")
-        # print query
-        # decoded_str = query.decode("windows-1252")
-        # encoded_str = decoded_str.encode("utf8")
-
-        # enc = locale.getpreferredencoding()
-        # print enc
         query=self.searchLineEdit.text()
-        # query=("Высоцкий").decode(enc)
-        # print query
         try:
             method = 'audio.search'
-            self.resp = self.parent.vk.searchAudio(method=method, user_id=self.parent.user_id, token=self.parent.token, q=query)
+            self.resp = self.parent.vk.searchAudio(method=method, userId=self.parent.userId, token=self.parent.token, q=query)
         except api_exception.MethodErr, e:
             msg = PyQt4.QtGui.QMessageBox(self)
             msg.setText(e.error_msg+'\n'+str(e.request_params))
@@ -111,10 +102,10 @@ class searchDialog(QtGui.QDialog, Ui_SearchDialog):
     def handleResponse(self, res):
         self.searchTableWidget.setRowCount(len(self.resp)-1)
         i = 0
-        for song_info in self.resp[1:]:
-            artist   = PyQt4.QtGui.QTableWidgetItem(song_info['artist'])
-            title    = PyQt4.QtGui.QTableWidgetItem(song_info['title'])
-            duration = PyQt4.QtGui.QTableWidgetItem(self.parent.convertDuration(song_info['duration']))
+        for songInfo in self.resp[1:]:
+            artist   = PyQt4.QtGui.QTableWidgetItem(songInfo['artist'])
+            title    = PyQt4.QtGui.QTableWidgetItem(songInfo['title'])
+            duration = PyQt4.QtGui.QTableWidgetItem(self.parent.convertDuration(songInfo['duration']))
 
             self.searchTableWidget.setItem(i, 0, artist)
             self.searchTableWidget.setItem(i, 1, title)
@@ -123,7 +114,7 @@ class searchDialog(QtGui.QDialog, Ui_SearchDialog):
         return
 
     def addToPlayList(self):
-            indexes = self.search_selected()
+            indexes = self.searchSelected()
             if len(indexes) == 0:
                 return
             if self.parent.playlist is None:
@@ -135,20 +126,20 @@ class searchDialog(QtGui.QDialog, Ui_SearchDialog):
             selected = self.searchTableWidget.selectedIndexes()
 
             count = len(selected)/3
-            old_count = self.parent.playlistTableWidget.rowCount()
+            oldCount = self.parent.playlistTableWidget.rowCount()
             self.parent.playlistTableWidget.setRowCount(self.parent.playlistTableWidget.rowCount()+count)
             for i in range(len(selected)/3):
                 artist = PyQt4.QtGui.QTableWidgetItem(selected[i].data(0).toString())
                 title = PyQt4.QtGui.QTableWidgetItem(selected[i+count].data(0).toString())
                 duration = PyQt4.QtGui.QTableWidgetItem(selected[i+2*count].data(0).toString())
 
-                self.parent.playlistTableWidget.setItem(old_count+i, 0, PyQt4.QtGui.QTableWidgetItem(artist))
-                self.parent.playlistTableWidget.setItem(old_count+i, 1, PyQt4.QtGui.QTableWidgetItem(title))
-                self.parent.playlistTableWidget.setItem(old_count+i, 2, PyQt4.QtGui.QTableWidgetItem(duration))
+                self.parent.playlistTableWidget.setItem(oldCount+i, 0, PyQt4.QtGui.QTableWidgetItem(artist))
+                self.parent.playlistTableWidget.setItem(oldCount+i, 1, PyQt4.QtGui.QTableWidgetItem(title))
+                self.parent.playlistTableWidget.setItem(oldCount+i, 2, PyQt4.QtGui.QTableWidgetItem(duration))
 
             self.closeLoginDialog()
 
-    def search_selected(self):
+    def searchSelected(self):
         indexes = []
         for selectionRange in self.searchTableWidget.selectedRanges():
             indexes.extend(range(selectionRange.topRow(), selectionRange.bottomRow()+1))

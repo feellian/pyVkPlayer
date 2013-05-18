@@ -43,10 +43,11 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(mainWindow, self).__init__()
         self.setupUi(self)
-        self.API_ID = "3629495"
-        self.user_id = False
+        self.apiId = "3629495"
+        self.userId = False
         self.token = False
         self.expires = False
+
         self.player = player.Player()
         self.player.redrawPlayList = self.redraw
         self.player.setStatusBar = self.statusBarMessage
@@ -87,7 +88,6 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
 
         self.progressSlider.sliderMoved .connect(self.player.setTrackPosition)
         self.connect(self.progressSlider,  PyQt4.QtCore.SIGNAL("clicked()"), self.openSearchDialog)
-
         self.connect(self.addPushButton,  PyQt4.QtCore.SIGNAL("clicked()"), self.openSearchDialog)
         self.connect(self.playPushButton, PyQt4.QtCore.SIGNAL("clicked()"), self.player.play)
         self.connect(self.pausePushButton, PyQt4.QtCore.SIGNAL("clicked()"), self.player.pause)
@@ -108,7 +108,7 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         self.playlistTableWidget.setColumnCount(3)
 
         self.highlighted = -1
-        self.user_id, self.token, self.playlist, self.expires = config.load_session()
+        self.userId, self.token, self.playlist, self.expires = config.loadSession()
 
         if not self.expires:
             self.addPushButton.setEnabled(False)
@@ -116,11 +116,11 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
 
         if self.playlist:
             self.updatePlaylist()
-        if self.user_id == None and self.token == None:
+        if self.userId == None and self.token == None:
             self.addPushButton.setEnabled(False)
             self.actionAddSongs.setEnabled(False)
 
-        self.vk = api.Api(self.API_ID)
+        self.vk = api.Api(self.apiId)
         self.message = ''
 
         self.c = Communicate()
@@ -204,19 +204,19 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         s.close()
 
     def updatePlaylist(self):
-        old_count = self.playlistTableWidget.rowCount()
+        oldCount = self.playlistTableWidget.rowCount()
         self.playlistTableWidget.setRowCount(len(self.playlist))
 
-        for song_info in self.playlist:
-            artist = PyQt4.QtGui.QTableWidgetItem(song_info['artist'])
-            title = PyQt4.QtGui.QTableWidgetItem(song_info['title'])
-            duration = PyQt4.QtGui.QTableWidgetItem(self.convertDuration(song_info['duration']))
+        for songInfo in self.playlist:
+            artist = PyQt4.QtGui.QTableWidgetItem(songInfo['artist'])
+            title = PyQt4.QtGui.QTableWidgetItem(songInfo['title'])
+            duration = PyQt4.QtGui.QTableWidgetItem(self.convertDuration(songInfo['duration']))
 
-            self.playlistTableWidget.setItem(old_count, 0, artist)
-            self.playlistTableWidget.setItem(old_count, 1, title)
-            self.playlistTableWidget.setItem(old_count, 2, duration)
-            old_count += 1
-            self.player.add(song_info['url'])
+            self.playlistTableWidget.setItem(oldCount, 0, artist)
+            self.playlistTableWidget.setItem(oldCount, 1, title)
+            self.playlistTableWidget.setItem(oldCount, 2, duration)
+            oldCount += 1
+            self.player.add(songInfo['url'])
 
     def convertDuration(self, time):
         time = int(time)
@@ -230,9 +230,9 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
 
     def viewSongText(self):
         method = 'audio.getLyrics'
-        lyrics_id = self.playlist[self.player.position]['lyrics_id']
+        lyricsId = self.playlist[self.player.position]['lyricsId']
 
-        resp = self.vk.getLyrics(method=method, user_id=self.user_id, token=self.token, lyrics_id=lyrics_id)
+        resp = self.vk.getLyrics(method=method, userId=self.userId, token=self.token, lyricsId=lyricsId)
         self.tD = songText.songTextDialog(self)
         self.tD.show()
         self.tD.setText(resp)
@@ -275,5 +275,5 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         self.sD.show()
 
     def closeApp(self):
-        config.save_session(user_id=self.user_id, token=self.token, playlist=self.playlist, expires=self.expires)
+        config.saveSession(userId=self.userId, token=self.token, playlist=self.playlist, expires=self.expires)
         exit()

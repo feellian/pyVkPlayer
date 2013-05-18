@@ -22,11 +22,11 @@ class ApiErr(Exception):
 	pass
 
 class MethodErr(ApiErr):
-	def __init__(self, error_code, error_msg, request_params):
-		self.error_code = error_code
-		self.error_msg = error_msg
-		self.request_params = request_params
+	def __init__(self, errorCode, errorMsg, requestParams):
+		self.errorCode = errorCode
+		self.errorMsg = errorMsg
+		self.requestParams = requestParams
 
 	def __str__(self):
-		return repr(self.error_msg)
+		return repr(self.errorMsg)
 
