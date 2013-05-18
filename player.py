@@ -129,9 +129,13 @@ class Player(object):
     If we call this function as event handler we
     assign selected row as current position.
     """
-    def play(self, pos=False):
-        if pos:
+    def play(self, pos=-1):
+
+        if pos != -1:
+            print self.selected
             self.position = self.selected
+
+
         if self.checkStates():
             if self.position == -1:
                 self.chooseFirst()
