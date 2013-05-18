@@ -1,0 +1,3 @@
+Error: Could not open resource for reading.gstsouphttpsrc.c(1117): gst_soup_http_src_parse_status (): /GstPlayBin2:player/GstURIDecodeBin:uridecodebin0/GstSoupHTTPSrc:source:
+Not Found (404), URL: http://cs5885.vk.me/u3423324/audios/4d7f8fb25bb2.mp3Error: Could not open resource for reading.gstsouphttpsrc.c(1117): gst_soup_http_src_parse_status (): /GstPlayBin2:player/GstURIDecodeBin:uridecodebin1/GstSoupHTTPSrc:source:
+Not Found (404), URL: http://cs5740.vk.me/u53220637/audios/cdcebb90f450.mp3%
