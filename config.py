@@ -20,6 +20,7 @@
 
 import shelve
 import os
+import time
 
 file_names = {u'config_dir': u'.pvp',
 u'session': u'session.db'}
@@ -39,31 +40,35 @@ def config_file_check(config_file_path, mode):
 		return True
 	else:
 		return False
+def checkSession(expires):
+	if not expires or expires - time.time() < 0:
+	   		return False
+
+
 
 def load_session():
 	session_path = os.environ[u'HOME']+'/'+file_names[u'config_dir']+'/'+file_names[u'session']
 	if config_file_check(session_path, os.R_OK):
 
 		s = shelve.open(session_path, 'r')
-		if "user_id" and 'token' and 'playlist' in s:
+		if "user_id" and 'token' and 'playlist' and 'expires' in s:
 			user_id = s['user_id']
 			token = s['token']
 			playlist = s['playlist']
+			expires = checkSession(s['expires'])
 		else:
 			s.close()
-			return None, None, []
+			return False, False, [], False
 		s.close()
-		return user_id, token, playlist
+		return user_id, token, playlist, expires
 	else:
-		return None, None, []
+		return False, False, [], False
 
 def save_session(**kwarg):
 	config_dir_check()
 	session_path = os.environ[u'HOME']+'/'+file_names[u'config_dir']+'/'+file_names[u'session']
 	s = shelve.open(session_path, 'n')
-
-	s['user_id'] = kwarg["user_id"]
-	s['token'] = kwarg["token"]
-	s['playlist'] = kwarg["playlist"]
+	for i in kwarg:
+		s[i] = kwarg[i]
 	s.close()
 
