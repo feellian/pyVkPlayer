@@ -53,17 +53,17 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         self.player.setSliderRange = self.setSliderRange
 
 
-        self.actionLogin.setShortcut('Ctrl+L')
         self.actionRandom.setShortcut('Ctrl+Shift+R')
         self.actionQuite.setShortcut('Ctrl+Q')
-        self.actionSavePlaylist.setShortcut('Ctrl+Alt+S')
-        self.actionOpenPlaylist.setShortcut('Ctrl+Alt+O')
-        self.addPushButton.setShortcut('Ctrl+Alt+A')
-        self.playPushButton.setShortcut('Ctrl+Alt+X')
-        self.pausePushButton.setShortcut('Ctrl+Alt+C')
-        self.stopPushButton.setShortcut('Ctrl+Alt+V')
-        self.nextPushButton.setShortcut('Ctrl+Alt+B')
-        self.prevPushButton.setShortcut('Ctrl+Alt+Z')
+        self.actionLogin.setShortcut('Ctrl+L')
+        self.actionSavePlaylist.setShortcut('Ctrl+S')
+        self.actionOpenPlaylist.setShortcut('Ctrl+O')
+        self.addPushButton.setShortcut('Ctrl+AltA')
+        self.playPushButton.setShortcut('Ctrl+X')
+        self.pausePushButton.setShortcut('Ctrl+C')
+        self.stopPushButton.setShortcut('Ctrl+V')
+        self.nextPushButton.setShortcut('Ctrl+B')
+        self.prevPushButton.setShortcut('Ctrl+Z')
 
         self.actionLogin.triggered.connect(self.openLoginDialog)
         self.actionAbout.triggered.connect(self.openAboutDialog)
@@ -85,7 +85,7 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
 
 
 
-        # self.progressSlider.valueChanged.connect(self.player.setTrackPosition)
+        self.progressSlider.sliderMoved .connect(self.player.setTrackPosition)
         self.connect(self.progressSlider,  PyQt4.QtCore.SIGNAL("clicked()"), self.openSearchDialog)
 
         self.connect(self.addPushButton,  PyQt4.QtCore.SIGNAL("clicked()"), self.openSearchDialog)
