@@ -46,13 +46,13 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         self.apiId = "3629495"
         self.userId = False
         self.token = False
-        self.expires = False
+        self.expires = 0
 
         self.player = player.Player()
         self.player.redrawPlayList = self.redraw
         self.player.setStatusBar = self.statusBarMessage
         self.player.setSliderRange = self.setSliderRange
-
+        self.setWindowIcon(QtGui.QIcon('windowIcon.jpg'))
 
         self.actionRandom.setShortcut('Ctrl+Shift+R')
         self.actionQuite.setShortcut('Ctrl+Q')
@@ -97,7 +97,6 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         self.connect(self.playlistTableWidget, PyQt4.QtCore.SIGNAL("cellDoubleClicked(int, int)"), self.player.play)
         self.connect(self.playlistTableWidget, PyQt4.QtCore.SIGNAL("cellClicked(int, int)"), self.setPosition)
         self.playlistTableWidget.keyPressEvent = self.playlistTableWidgetKey
-        # self.playlistTableWidget.horizontalHeader().setResizeMode(QtGui.QHeaderView.Stretch)
         self.playlistTableWidget.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows);
 
         self.playlistTableWidget.setColumnWidth(0, 225)
