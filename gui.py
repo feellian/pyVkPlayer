@@ -44,8 +44,9 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         super(mainWindow, self).__init__()
         self.setupUi(self)
         self.API_ID = "3629495"
-        self.user_id = None
-        self.token = None
+        self.user_id = False
+        self.token = False
+        self.expires = False
         self.player = player.Player()
         self.player.redrawPlayList = self.redraw
         self.player.setStatusBar = self.statusBarMessage
@@ -107,7 +108,11 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         self.playlistTableWidget.setColumnCount(3)
 
         self.highlighted = -1
-        self.user_id, self.token, self.playlist = config.load_session()
+        self.user_id, self.token, self.playlist, self.expires = config.load_session()
+
+        if not self.expires:
+            self.addPushButton.setEnabled(False)
+            self.actionAddSongs.setEnabled(False)
 
         if self.playlist:
             self.updatePlaylist()
@@ -270,5 +275,5 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         self.sD.show()
 
     def closeApp(self):
-        config.save_session(user_id=self.user_id, token=self.token, playlist=self.playlist )
+        config.save_session(user_id=self.user_id, token=self.token, playlist=self.playlist, expires=self.expires)
         exit()

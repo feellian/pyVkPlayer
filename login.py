@@ -18,13 +18,13 @@
 #       along with vkontakte audio player.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import time
 from urllib import unquote
 
 import PyQt4
 from PyQt4 import QtGui, QtCore, uic, QtWebKit
 from PyQt4.QtGui import QDialog
 from PyQt4.QtCore import QUrl
-from PyQt4.QtGui import QMessageBox
 
 from loginDialog import Ui_LoginDialog
 
@@ -59,8 +59,13 @@ class loginDialog(QtGui.QDialog, Ui_LoginDialog):
             raise LoginExc('Login failure')
 
     def returnSession(self, session):
-        self.parent.user_id = session[-1]
-        self.parent.token = session[1].split("&")[0]
+        session = "&".join(session).split('&')
+        session = {session[i]:session[i + 1] for i in range(0, len(session), 2)}
+
+        self.parent.expires = time.time() + int(session["expires_in"])
+        self.parent.user_id = session[u"user_id"]
+        self.parent.token = session[u"https://oauth.vk.com/blank.html#access_token"]
+
         self.parent.addPushButton.setEnabled(True)
-        self.parent.actionAddSongs.setEnabled(False)
+        self.parent.actionAddSongs.setEnabled(True)
         self.closeLoginDialog()
