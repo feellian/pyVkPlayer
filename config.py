@@ -26,49 +26,50 @@ fileNames = {u'config_dir': u'.pvp',
 u'session': u'session.db'}
 
 def configDirCheck():
-	configDirPath = os.environ[u'HOME']+'/'+fileNames[u'config_dir']
-	if os.access(configDirPath, os.F_OK):
-		return True
-	else:
-		os.mkdir(configDirPath)
-		return False
+    configDirPath = os.environ[u'HOME']+'/'+fileNames[u'config_dir']
+    if os.access(configDirPath, os.F_OK):
+        return True
+    else:
+        os.mkdir(configDirPath)
+        return False
 
 def configFileCheck(configFilePath, mode):
-	if not configDirCheck():
-		return False
-	if os.access(configFilePath, mode):
-		return True
-	else:
-		return False
+    if not configDirCheck():
+        return False
+    if os.access(configFilePath, mode):
+        return True
+    else:
+        return False
 def checkSession(expires):
-	if not expires or expires - time.time() < 0:
-	   		return False
+    if not expires or expires - time.time() < 0:
+            return 0
+    else:
+        return expires
 
 
 
 def loadSession():
-	sessionPath = os.environ[u'HOME']+'/'+fileNames[u'config_dir']+'/'+fileNames[u'session']
-	if configFileCheck(sessionPath, os.R_OK):
-
-		s = shelve.open(sessionPath, 'r')
-		if "userId" and 'token' and 'playlist' and 'expires' in s:
-			userId = s['userId']
-			token = s['token']
-			playlist = s['playlist']
-			expires = checkSession(s['expires'])
-		else:
-			s.close()
-			return False, False, [], False
-		s.close()
-		return userId, token, playlist, expires
-	else:
-		return False, False, [], False
+    sessionPath = os.environ[u'HOME']+'/'+fileNames[u'config_dir']+'/'+fileNames[u'session']
+    if configFileCheck(sessionPath, os.R_OK):
+        s = shelve.open(sessionPath, 'r')
+        if "userId" and 'token' and 'playlist' and 'expires' in s:
+            userId = s['userId']
+            token = s['token']
+            playlist = s['playlist']
+            expires = checkSession(s['expires'])
+        else:
+            s.close()
+            return False, False, [], False
+        s.close()
+        return userId, token, playlist, expires
+    else:
+        return False, False, [], False
 
 def saveSession(**kwarg):
-	configDirCheck()
-	sessionPath = os.environ[u'HOME']+'/'+fileNames[u'config_dir']+'/'+fileNames[u'session']
-	s = shelve.open(sessionPath, 'n')
-	for i in kwarg:
-		s[i] = kwarg[i]
-	s.close()
+    configDirCheck()
+    sessionPath = os.environ[u'HOME']+'/'+fileNames[u'config_dir']+'/'+fileNames[u'session']
+    s = shelve.open(sessionPath, 'n')
+    for i in kwarg:
+        s[i] = kwarg[i]
+    s.close()
 
