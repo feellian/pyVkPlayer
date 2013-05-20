@@ -27,18 +27,13 @@ from urlparse import urlparse
 import api_exception
 
 class Api(object):
-    def __init__(self, apiId):
-        self.apiId = apiId
+    def __init__(self):
+        pass
 
-    def searchAudio(self, **kwargs):
-        url = "https://api.vk.com/method/%s?q=%s&uid=%s&access_token=%s&count=200" % (kwargs["method"], kwargs["q"], kwargs["userId"], kwargs["token"])
-        # print (urllib2.urlopen(url).read())
-        return json.loads(urllib2.urlopen(url).read())["response"]
-
-    def getAudio(self, **kwargs):
-        url = "https://api.vk.com/method/%s?uid=%s&access_token=%s" % (kwargs["method"], kwargs["userId"], kwargs["token"])
-        return json.loads(urllib2.urlopen(url).read())["response"]
-
-    def getLyrics(self, **kwargs):
-        url = "https://api.vk.com/method/%s?uid=%s&access_token=%s&lyrics_id=%s" % (kwargs["method"], kwargs["userId"], kwargs["token"], kwargs["lyricsId"])
+    def method(self, method, **kwargs):
+        url = "https://api.vk.com/method/"+ method
+        params = ''
+        for i in kwargs:
+            params += "&" + i + '=' + kwargs[i]
+        url = url  + '?' + params[1:]
         return json.loads(urllib2.urlopen(url).read())["response"]

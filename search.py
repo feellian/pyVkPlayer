@@ -43,8 +43,8 @@ class searchDialog(QtGui.QDialog, Ui_SearchDialog):
         super(searchDialog, self).__init__(parent)
         self.parent = parent
         self.setupUi(self)
-        self.connect(self.searchPushButton, PyQt4.QtCore.SIGNAL("clicked()"), self.searchAudio)
-        self.connect(self.getOwnListButton, PyQt4.QtCore.SIGNAL("clicked()"), self.getAudio)
+        self.connect(self.searchPushButton, PyQt4.QtCore.SIGNAL("clicked()"), self.audioSearch)
+        self.connect(self.getOwnListButton, PyQt4.QtCore.SIGNAL("clicked()"), self.audioGet)
         self.connect(self.addPushButton,  PyQt4.QtCore.SIGNAL("clicked()"), self.addToPlayList)
         self.connect(self.backPushButton,  PyQt4.QtCore.SIGNAL("clicked()"), self.closeLoginDialog)
         self.searchTableWidget.keyPressEvent = self.searchTableWidgetKey
@@ -72,10 +72,10 @@ class searchDialog(QtGui.QDialog, Ui_SearchDialog):
     def closeLoginDialog(self):
         self.close()
 
-    def getAudio(self):
+    def audioGet(self):
         try:
             method = 'audio.get'
-            self.resp = self.parent.vk.getAudio(method=method, userId=self.parent.userId, token=self.parent.token)
+            self.resp = self.parent.vk.method(method, uid=self.parent.userId, access_token=self.parent.token)
         except api_exception.MethodErr, e:
             msg = PyQt4.QtGui.QMessageBox(self)
             msg.setText(e.error_msg+'\n'+str(e.request_params))
@@ -85,11 +85,12 @@ class searchDialog(QtGui.QDialog, Ui_SearchDialog):
         self.handleResponse(self.resp)
 
 
-    def searchAudio(self):
-        query=self.searchLineEdit.text()
+    def audioSearch(self):
         try:
+            query=str(self.searchLineEdit.text())
             method = 'audio.search'
-            self.resp = self.parent.vk.searchAudio(method=method, userId=self.parent.userId, token=self.parent.token, q=query)
+            count = '200'
+            self.resp = self.parent.vk.method(method, uid=self.parent.userId, access_token=self.parent.token, q=query, count=count)
         except api_exception.MethodErr, e:
             msg = PyQt4.QtGui.QMessageBox(self)
             msg.setText(e.error_msg+'\n'+str(e.request_params))

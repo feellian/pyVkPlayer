@@ -119,7 +119,7 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
             self.addPushButton.setEnabled(False)
             self.actionAddSongs.setEnabled(False)
 
-        self.vk = api.Api(self.apiId)
+        self.vk = api.Api()
         self.message = ''
 
         self.c = Communicate()
@@ -228,10 +228,10 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         self.player.selected = position
 
     def viewSongText(self):
-        method = 'audio.getLyrics'
+        method = 'audio.audioGetLyrics'
         lyricsId = self.playlist[self.player.position]['lyricsId']
 
-        resp = self.vk.getLyrics(method=method, userId=self.userId, token=self.token, lyricsId=lyricsId)
+        resp = self.vk.audioGetLyrics(method=method, userId=self.userId, token=self.token, lyricsId=lyricsId)
         self.tD = songText.songTextDialog(self)
         self.tD.show()
         self.tD.setText(resp)
