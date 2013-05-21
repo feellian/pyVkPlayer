@@ -70,7 +70,7 @@ class Player(object):
     """
 
     """
-    def redrawPlayList(self, attr):
+    def redrawPlayList(self):
         pass
 
     """

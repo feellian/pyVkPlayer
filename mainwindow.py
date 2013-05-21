@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Sat May 18 18:04:51 2013
+# Created: Sun May 19 00:58:50 2013
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,8 +26,14 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(606, 291)
+        MainWindow.resize(606, 263)
+        MainWindow.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.centralwidget = QtGui.QWidget(MainWindow)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
+        self.centralwidget.setSizePolicy(sizePolicy)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.horizontalLayoutWidget = QtGui.QWidget(self.centralwidget)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(0, 0, 481, 41))
@@ -89,15 +95,29 @@ class Ui_MainWindow(object):
         self.progressSlider.setOrientation(QtCore.Qt.Horizontal)
         self.progressSlider.setObjectName(_fromUtf8("progressSlider"))
         self.horizontalLayout.addWidget(self.progressSlider)
-        self.playlistTableWidget = QtGui.QTableWidget(self.centralwidget)
-        self.playlistTableWidget.setGeometry(QtCore.QRect(0, 40, 601, 201))
+        self.timeLabel = QtGui.QLabel(self.centralwidget)
+        self.timeLabel.setGeometry(QtCore.QRect(480, 10, 121, 17))
+        self.timeLabel.setText(_fromUtf8(""))
+        self.timeLabel.setObjectName(_fromUtf8("timeLabel"))
+        self.horizontalLayoutWidget_2 = QtGui.QWidget(self.centralwidget)
+        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(0, 40, 601, 161))
+        self.horizontalLayoutWidget_2.setObjectName(_fromUtf8("horizontalLayoutWidget_2"))
+        self.horizontalLayout2 = QtGui.QHBoxLayout(self.horizontalLayoutWidget_2)
+        self.horizontalLayout2.setSizeConstraint(QtGui.QLayout.SetMinAndMaxSize)
+        self.horizontalLayout2.setMargin(0)
+        self.horizontalLayout2.setObjectName(_fromUtf8("horizontalLayout2"))
+        self.playlistTableWidget = QtGui.QTableWidget(self.horizontalLayoutWidget_2)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHorizontalStretch(1)
+        sizePolicy.setVerticalStretch(1)
         sizePolicy.setHeightForWidth(self.playlistTableWidget.sizePolicy().hasHeightForWidth())
         self.playlistTableWidget.setSizePolicy(sizePolicy)
+        self.playlistTableWidget.setMinimumSize(QtCore.QSize(100, 100))
+        self.playlistTableWidget.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.playlistTableWidget.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.playlistTableWidget.setAutoScrollMargin(3)
         self.playlistTableWidget.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        self.playlistTableWidget.setDragDropMode(QtGui.QAbstractItemView.NoDragDrop)
         self.playlistTableWidget.setShowGrid(True)
         self.playlistTableWidget.setObjectName(_fromUtf8("playlistTableWidget"))
         self.playlistTableWidget.setColumnCount(3)
@@ -111,10 +131,9 @@ class Ui_MainWindow(object):
         self.playlistTableWidget.setHorizontalHeaderItem(1, item)
         item = QtGui.QTableWidgetItem()
         self.playlistTableWidget.setHorizontalHeaderItem(2, item)
-        self.timeLabel = QtGui.QLabel(self.centralwidget)
-        self.timeLabel.setGeometry(QtCore.QRect(480, 10, 121, 17))
-        self.timeLabel.setText(_fromUtf8(""))
-        self.timeLabel.setObjectName(_fromUtf8("timeLabel"))
+        self.playlistTableWidget.verticalHeader().setStretchLastSection(True)
+        self.horizontalLayout2.addWidget(self.playlistTableWidget)
+        self.horizontalLayout2.setStretch(0, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 606, 25))

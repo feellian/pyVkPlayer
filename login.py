@@ -21,7 +21,7 @@
 import time
 from urllib import unquote
 
-import PyQt4
+# import PyQt4
 from PyQt4 import QtGui, QtCore, uic, QtWebKit
 from PyQt4.QtGui import QDialog
 from PyQt4.QtCore import QUrl
@@ -50,7 +50,7 @@ class loginDialog(QtGui.QDialog, Ui_LoginDialog):
     def closeLoginDialog(self):
         self.close()
 
-    def evurlChanged(self, url):
+    def evurlChanged(self):
         path = str(self.webView.url().path())
         if path == '/blank.html':
             self.webView.url().path()

@@ -19,11 +19,11 @@
 #
 
 from urllib import unquote
-import json
-import locale
+# import json
+# import locale
 
 import PyQt4
-from PyQt4 import QtGui, QtCore, uic, QtWebKit
+# from PyQt4 import QtGui, QtCore, uic, QtWebKit
 from PyQt4.QtGui import QDialog
 from PyQt4.QtCore import QUrl
 from PyQt4.QtGui import QMessageBox
@@ -38,7 +38,7 @@ class SearchExc(Exception):
     def __str__(self):
         return repr(self.error_msg)
 
-class searchDialog(QtGui.QDialog, Ui_SearchDialog):
+class searchDialog(PyQt4.QtGui.QDialog, Ui_SearchDialog):
     def __init__(self, parent=None):
         super(searchDialog, self).__init__(parent)
         self.parent = parent
@@ -47,61 +47,27 @@ class searchDialog(QtGui.QDialog, Ui_SearchDialog):
         self.connect(self.getOwnListButton, PyQt4.QtCore.SIGNAL("clicked()"), self.audioGet)
         self.connect(self.addPushButton,  PyQt4.QtCore.SIGNAL("clicked()"), self.addToPlayList)
         self.connect(self.backPushButton,  PyQt4.QtCore.SIGNAL("clicked()"), self.closeLoginDialog)
-        self.searchTableWidget.keyPressEvent = self.searchTableWidgetKey
-        self.searchTableWidget.horizontalHeader().setResizeMode(QtGui.QHeaderView.Stretch)
+        self.searchTableWidget.horizontalHeader().setResizeMode(PyQt4.QtGui.QHeaderView.Stretch)
         self.searchTableWidget.setColumnCount(3)
-        self.searchTableWidget.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows);
-
-
-
-
-    def searchTableWidgetKey(self, event):
-        if event.key() == PyQt4.QtCore.Qt.Key_Delete:
-            self.delete(self.playlist_selected())
-        elif event.key() == PyQt4.QtCore.Qt.Key_Enter or event.key() == PyQt4.QtCore.Qt.Key_Return:
-            self.play(self.searchTableWidget.selectedRanges()[0].topRow())
-        PyQt4.QtGui.QTableWidget.keyPressEvent(self.searchTableWidget, event)
-
-    def playlistSelected(self):
-        indexes = []
-        for selectionRange in self.playlistTableWidget.selectedRanges():
-            indexes.extend(range(selectionRange.topRow(), selectionRange.bottomRow()+1))
-        return indexes
-
+        self.searchTableWidget.setSelectionBehavior(PyQt4.QtGui.QAbstractItemView.SelectRows);
 
     def closeLoginDialog(self):
         self.close()
 
     def audioGet(self):
-        try:
-            method = 'audio.get'
-            self.resp = self.parent.vk.method(method, uid=self.parent.userId, access_token=self.parent.token)
-        except api_exception.MethodErr, e:
-            msg = PyQt4.QtGui.QMessageBox(self)
-            msg.setText(e.error_msg+'\n'+str(e.request_params))
-            msg.setWindowTitle('Api Error')
-            msg.exec_()
-            return
-        self.handleResponse(self.resp)
-
+        method = 'audio.get'
+        resp = self.parent.vk.method(method, uid=self.parent.userId, access_token=self.parent.token)
+        self.handleResponse(resp)
 
     def audioSearch(self):
-        try:
-            query=str(self.searchLineEdit.text())
-            method = 'audio.search'
-            count = '200'
-            self.resp = self.parent.vk.method(method, uid=self.parent.userId, access_token=self.parent.token, q=query, count=count)
-        except api_exception.MethodErr, e:
-            msg = PyQt4.QtGui.QMessageBox(self)
-            msg.setText(e.error_msg+'\n'+str(e.request_params))
-            msg.setWindowTitle('Api Error')
-            msg.exec_()
-            return
+        query=str(self.searchLineEdit.text())
+        method = 'audio.search'
+        count = '200'
+        self.resp = self.parent.vk.method(method, uid=self.parent.userId, access_token=self.parent.token, q=query, count=count)
         self.handleResponse(self.resp)
 
-
     def handleResponse(self, res):
-        self.searchTableWidget.setRowCount(len(self.resp)-1)
+        self.searchTableWidget.setRowCount(len(res)-1)
         i = 0
         for songInfo in self.resp[1:]:
             artist   = PyQt4.QtGui.QTableWidgetItem(songInfo['artist'])
@@ -143,5 +109,5 @@ class searchDialog(QtGui.QDialog, Ui_SearchDialog):
     def searchSelected(self):
         indexes = []
         for selectionRange in self.searchTableWidget.selectedRanges():
-            indexes.extend(range(selectionRange.topRow(), selectionRange.bottomRow()+1))
+            indexes.extend(range(selectionRange.topRow(), selectionRange.bottomRow() + 1))
         return indexes

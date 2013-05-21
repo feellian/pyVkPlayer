@@ -19,15 +19,12 @@
 #
 
 import PyQt4
-from PyQt4 import QtGui, QtCore
 import shelve
-import random
 from time import sleep
 import thread
 
 from mainwindow import Ui_MainWindow
 import api
-import api_exception
 import player
 import about
 import login
@@ -35,8 +32,8 @@ import search
 import config
 import songText
 
-class Communicate(QtCore.QObject):
-    updateTime = QtCore.pyqtSignal()
+class Communicate(PyQt4.QtCore.QObject):
+    updateTime = PyQt4.QtCore.pyqtSignal()
 
 
 class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
@@ -52,7 +49,7 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         self.player.redrawPlayList = self.redraw
         self.player.setStatusBar = self.statusBarMessage
         self.player.setSliderRange = self.setSliderRange
-        self.setWindowIcon(QtGui.QIcon('windowIcon.jpg'))
+        self.setWindowIcon(PyQt4.QtGui.QIcon('windowIcon.jpg'))
 
         self.actionRandom.setShortcut('Ctrl+Shift+R')
         self.actionQuite.setShortcut('Ctrl+Q')
@@ -97,12 +94,12 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         self.connect(self.playlistTableWidget, PyQt4.QtCore.SIGNAL("cellDoubleClicked(int, int)"), self.player.play)
         self.connect(self.playlistTableWidget, PyQt4.QtCore.SIGNAL("cellClicked(int, int)"), self.setPosition)
         self.playlistTableWidget.keyPressEvent = self.playlistTableWidgetKey
-        self.playlistTableWidget.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows);
+        self.playlistTableWidget.setSelectionBehavior(PyQt4.QtGui.QAbstractItemView.SelectRows);
 
         self.playlistTableWidget.setColumnWidth(0, 225)
         self.playlistTableWidget.setColumnWidth(1, 225)
         self.playlistTableWidget.setColumnWidth(2, 80)
-        self.playlistTableWidget.horizontalHeader().setResizeMode(0, QtGui.QHeaderView.Stretch)
+        self.playlistTableWidget.horizontalHeader().setResizeMode(0, PyQt4.QtGui.QHeaderView.Stretch)
         self.playlist = []
         self.playlistTableWidget.setColumnCount(3)
 
@@ -130,14 +127,14 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
     def handl(self, delay):
         while True:
             self.c.updateTime.emit()
-            sleep(1)
+            sleep(delay)
 
     def setSliderPos(self, pos):
         self.progressSlider.setSliderPosition(pos)
 
     def setSliderRange(self):
-        max = self.playlist[self.player.position]['duration']
-        self.progressSlider.setRange(0, max)
+        maxRange = self.playlist[self.player.position]['duration']
+        self.progressSlider.setRange(0, maxRange)
 
     def updateTime(self):
         timePos = int(self.player.timePos())
@@ -228,10 +225,10 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         self.player.selected = position
 
     def viewSongText(self):
-        method = 'audio.audioGetLyrics'
-        lyricsId = self.playlist[self.player.position]['lyricsId']
+        method = 'audio.getLyrics'
+        lyricsId = self.playlist[self.player.position]['lyrics_id']
 
-        resp = self.vk.audioGetLyrics(method=method, userId=self.userId, token=self.token, lyricsId=lyricsId)
+        resp = self.vk.method(method, uid=self.userId, access_token=self.token, lyrics_id=lyricsId)
         self.tD = songText.songTextDialog(self)
         self.tD.show()
         self.tD.setText(resp)
@@ -266,7 +263,7 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         self.lD.show()
 
     def openAboutDialog(self):
-        self.about = about.aboutDialog(self)
+        self.about = about.aboutDialog()
         self.about.show()
 
     def openSearchDialog(self):

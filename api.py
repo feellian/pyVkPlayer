@@ -19,11 +19,8 @@
 #
 
 import simplejson as json
-
+from PyQt4 import QtGui
 import urllib2
-import urllib
-from urllib import urlencode
-from urlparse import urlparse
 import api_exception
 
 class Api(object):
@@ -31,9 +28,18 @@ class Api(object):
         pass
 
     def method(self, method, **kwargs):
-        url = "https://api.vk.com/method/"+ method
-        params = ''
-        for i in kwargs:
-            params += "&" + i + '=' + kwargs[i]
-        url = url  + '?' + params[1:]
-        return json.loads(urllib2.urlopen(url).read())["response"]
+        try:
+            url = "https://api.vk.com/method/"+ method
+            params = ''
+            for i in kwargs:
+                params += "&" + i + '=' + kwargs[i]
+            url = url  + '?' + params[1:]
+            return json.loads(urllib2.urlopen(url).read())["response"]
+        except api_exception.MethodErr, e:
+            msg = QtGui.QMessageBox(self)
+            msg.setText(e.error_msg+'\n'+str(e.request_params))
+            msg.setWindowTitle('Api Error')
+            msg.exec_()
+            return
+
+
