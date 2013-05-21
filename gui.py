@@ -86,6 +86,7 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         self.progressSlider.sliderMoved .connect(self.player.setTrackPosition)
         self.connect(self.progressSlider,  PyQt4.QtCore.SIGNAL("clicked()"), self.openSearchDialog)
         self.connect(self.addPushButton,  PyQt4.QtCore.SIGNAL("clicked()"), self.openSearchDialog)
+        self.connect(self.downloadPushButton,  PyQt4.QtCore.SIGNAL("clicked()"), self.addAudioIntoOwnList)
         self.connect(self.playPushButton, PyQt4.QtCore.SIGNAL("clicked()"), self.player.play)
         self.connect(self.pausePushButton, PyQt4.QtCore.SIGNAL("clicked()"), self.player.pause)
         self.connect(self.stopPushButton, PyQt4.QtCore.SIGNAL("clicked()"), self.player.stop)
@@ -204,8 +205,8 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         self.playlistTableWidget.setRowCount(len(self.playlist))
 
         for songInfo in self.playlist:
-            artist = PyQt4.QtGui.QTableWidgetItem(songInfo['artist'])
-            title = PyQt4.QtGui.QTableWidgetItem(songInfo['title'])
+            artist = PyQt4.QtGui.QTableWidgetItem(songInfo['artist'].replace('&amp;', "&"))
+            title = PyQt4.QtGui.QTableWidgetItem(songInfo['title'].replace('&amp;', "&"))
             duration = PyQt4.QtGui.QTableWidgetItem(self.convertDuration(songInfo['duration']))
 
             self.playlistTableWidget.setItem(oldCount, 0, artist)
@@ -227,12 +228,18 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
     def viewSongText(self):
         method = 'audio.getLyrics'
         lyricsId = self.playlist[self.player.position]['lyrics_id']
-
         resp = self.vk.method(method, uid=self.userId, access_token=self.token, lyrics_id=lyricsId)
         self.tD = songText.songTextDialog(self)
         self.tD.show()
         self.tD.setText(resp)
 
+    def addAudioIntoOwnList(self):
+        method = 'audio.add'
+        print self.playlist[self.player.position]
+        aid = str(self.playlist[self.player.position]['aid'])
+        oid = str(self.playlist[self.player.position]['owner_id'])
+        resp = self.vk.method(method, uid=self.userId, access_token=self.token, aid=aid, oid=oid)
+        print resp
 
     def statusBarMessage(self):
         pos = self.player.position
