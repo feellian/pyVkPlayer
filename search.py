@@ -19,11 +19,8 @@
 #
 
 from urllib import unquote
-# import json
-# import locale
 
 import PyQt4
-# from PyQt4 import QtGui, QtCore, uic, QtWebKit
 from PyQt4.QtGui import QDialog
 from PyQt4.QtCore import QUrl
 from PyQt4.QtGui import QMessageBox
