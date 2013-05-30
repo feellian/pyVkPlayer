@@ -42,6 +42,7 @@ class searchDialog(PyQt4.QtGui.QDialog, Ui_SearchDialog):
     def __init__(self, parent=None):
         super(searchDialog, self).__init__(parent)
         self.parent = parent
+        self.resp = '';
         self.setupUi(self)
         self.connect(self.searchPushButton, PyQt4.QtCore.SIGNAL("clicked()"), self.audioSearch)
         self.connect(self.getOwnListButton, PyQt4.QtCore.SIGNAL("clicked()"), self.audioGet)
@@ -56,18 +57,18 @@ class searchDialog(PyQt4.QtGui.QDialog, Ui_SearchDialog):
 
     def audioGet(self):
         method = 'audio.get'
-        resp = self.parent.vk.method(method, uid=self.parent.userId, access_token=self.parent.token)
-        self.handleResponse(resp)
+        self.resp = self.parent.vk.method(method, uid=self.parent.userId, access_token=self.parent.token)
+        self.handleResponse()
 
     def audioSearch(self):
         query=str(self.searchLineEdit.text())
         method = 'audio.search'
         count = '200'
         self.resp = self.parent.vk.method(method, uid=self.parent.userId, access_token=self.parent.token, q=query, count=count)
-        self.handleResponse(self.resp)
+        self.handleResponse()
 
-    def handleResponse(self, res):
-        self.searchTableWidget.setRowCount(len(res)-1)
+    def handleResponse(self):
+        self.searchTableWidget.setRowCount(len(self.resp)-1)
         i = 0
         for songInfo in self.resp[1:]:
             artist   = PyQt4.QtGui.QTableWidgetItem(songInfo['artist'])
