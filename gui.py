@@ -235,11 +235,9 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
 
     def addAudioIntoOwnList(self):
         method = 'audio.add'
-        print self.playlist[self.player.position]
         aid = str(self.playlist[self.player.position]['aid'])
         oid = str(self.playlist[self.player.position]['owner_id'])
         resp = self.vk.method(method, uid=self.userId, access_token=self.token, aid=aid, oid=oid)
-        print resp
 
     def statusBarMessage(self):
         pos = self.player.position
