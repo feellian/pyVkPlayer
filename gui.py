@@ -196,9 +196,13 @@ class mainWindow(PyQt4.QtGui.QMainWindow, Ui_MainWindow):
         fileDialog.setAcceptMode(PyQt4.QtGui.QFileDialog.AcceptOpen)
         fname = fileDialog.getOpenFileName()
         s = shelve.open(unicode(fname), 'r')
+        for i in range(len(self.playlist)):
+            self.playlistTableWidget.removeRow(i)
+        self.playlist = []
         self.playlist.extend(s['playlist'])
         self.updatePlaylist()
         s.close()
+
 
     def updatePlaylist(self):
         oldCount = self.playlistTableWidget.rowCount()
