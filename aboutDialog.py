@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'aboutDialog.ui'
-#
-# Created: Fri May 10 18:15:05 2013
-#      by: PyQt4 UI code generator 4.10.1
-#
-# WARNING! All changes made in this file will be lost!
-
 from PyQt4 import QtCore, QtGui
 
 try:
@@ -39,7 +30,7 @@ class Ui_AboutDialog(object):
 
     def retranslateUi(self, AboutDialog):
         AboutDialog.setWindowTitle(_translate("AboutDialog", "Dialog", None))
-        self.label.setText(_translate("AboutDialog", "Copyright(C) 2013 Alexey Ulyanov", None))
+        self.label.setText(_translate("AboutDialog", "Copyright(C) 2015 Vladislav Polskikh. IP-12", None))
         self.okPushButton.setText(_translate("AboutDialog", "Ok", None))
 
 

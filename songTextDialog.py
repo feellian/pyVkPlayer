@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'songTextDialog.ui'
-#
-# Created: Wed May 15 01:17:41 2013
-#      by: PyQt4 UI code generator 4.10.1
-#
-# WARNING! All changes made in this file will be lost!
-
 from PyQt4 import QtCore, QtGui
 
 try:

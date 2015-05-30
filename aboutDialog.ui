@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Copyright(C) 2013 Alexey Ulyanov</string>
+    <string>Copyright(C) 2015 Vladislav Polskikh. IP-12</string>
    </property>
   </widget>
   <widget class="QPushButton" name="okPushButton">
